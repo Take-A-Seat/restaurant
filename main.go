@@ -13,6 +13,7 @@ var mongoHost = "takeaseat.knilq.mongodb.net"
 var mongoUser = "admin"
 var mongoPass = "p4r0l4"
 var mongoDatabase = "TakeASeat"
+var apiUrl = "https://api.takeaseat.site"
 
 func main() {
 	port := os.Getenv("TAKEASEAT_RESTAURANTS_PORT")
@@ -35,8 +36,9 @@ func main() {
 
 	//privateRoutesUsers need Authorization token in header
 	protectedUsers := router.Group("/restaurants")
-	protectedUsers.Use(validatorAuth.AuthMiddleware("http://www.api.takeaseat.site/auth/isAuthenticated"))
+	protectedUsers.Use(validatorAuth.AuthMiddleware(apiUrl + "/auth/isAuthenticated"))
 	{
+		protectedUsers.POST("/", handleCreateRestaurant)
 
 	}
 
