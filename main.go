@@ -39,6 +39,9 @@ func main() {
 	protectedUsers.Use(validatorAuth.AuthMiddleware(apiUrl + "/auth/isAuthenticated"))
 	{
 		protectedUsers.POST("/", handleCreateRestaurant)
+		protectedUsers.GET("/", handleGetAllRestaurants)
+		protectedUsers.GET("/id/:id", handleGetRestaurantById)
+		protectedUsers.PUT("/id/:id", handleUpdateRestaurant)
 
 	}
 
