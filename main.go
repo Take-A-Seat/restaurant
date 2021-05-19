@@ -14,6 +14,8 @@ var mongoUser = "admin"
 var mongoPass = "p4r0l4"
 var mongoDatabase = "TakeASeat"
 var apiUrl = "https://api.takeaseat.site"
+var hostname = "https://api.takeaseat.site"
+var directoryFiles = "/home/takeaseat/web/files/"
 
 func main() {
 	port := os.Getenv("TAKEASEAT_RESTAURANTS_PORT")
@@ -41,6 +43,7 @@ func main() {
 		protectedUsers.POST("/", handleCreateRestaurant)
 		protectedUsers.GET("/", handleGetAllRestaurants)
 		protectedUsers.GET("/id/:id", handleGetRestaurantById)
+		protectedUsers.GET("/managerId/:id", getRestaurantByManagerIdHandler)
 		protectedUsers.PUT("/id/:id", handleUpdateRestaurant)
 
 	}

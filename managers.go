@@ -7,6 +7,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+type ManagerRelation struct {
+	Id           primitive.ObjectID `bson:"_id" json:"id"`
+	RestaurantId primitive.ObjectID `bson:"restaurantId" json:"restaurantId"`
+	UserId       primitive.ObjectID `bson:"userId" json:"userId"`
+}
+
 func addManager(restaurantId primitive.ObjectID, userId primitive.ObjectID) error {
 	client, err := storage.ConnectToDatabase(mongoUser, mongoPass, mongoHost, mongoDatabase)
 	defer storage.DisconnectFromDatabase(client)
