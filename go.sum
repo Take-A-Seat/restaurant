@@ -35,6 +35,10 @@ github.com/Take-A-Seat/storage v0.0.0-20210519153918-eacf773c5626 h1:tg1fMUxt5TE
 github.com/Take-A-Seat/storage v0.0.0-20210519153918-eacf773c5626/go.mod h1:39O8oUD4mCEDUyXJiD4KcwHMnMK1BbsAL47xoY7ECc0=
 github.com/Take-A-Seat/storage v0.0.0-20210519154147-6dcff2505a7d h1:YSRCfwXZ7zcQ/4PtaoZROG5XA3zUXPGsjYAPSOVxNpk=
 github.com/Take-A-Seat/storage v0.0.0-20210519154147-6dcff2505a7d/go.mod h1:39O8oUD4mCEDUyXJiD4KcwHMnMK1BbsAL47xoY7ECc0=
+github.com/Take-A-Seat/storage v0.0.0-20210519201732-69b37ef027d3 h1:fIcOAyXDCNLCjfahneRYRnsYB/WBqH4A8ByuCqPBX+I=
+github.com/Take-A-Seat/storage v0.0.0-20210519201732-69b37ef027d3/go.mod h1:39O8oUD4mCEDUyXJiD4KcwHMnMK1BbsAL47xoY7ECc0=
+github.com/Take-A-Seat/storage v0.0.0-20210520072119-8222aab9934e h1:2OkaqlJ8uuhffpNSQn96ntGrE5+2bOmoPVNlyVD2N8s=
+github.com/Take-A-Seat/storage v0.0.0-20210520072119-8222aab9934e/go.mod h1:39O8oUD4mCEDUyXJiD4KcwHMnMK1BbsAL47xoY7ECc0=
 github.com/appleboy/gin-jwt/v2 v2.6.4 h1:4YlMh3AjCFnuIRiL27b7TXns7nLx8tU/TiSgh40RRUI=
 github.com/appleboy/gin-jwt/v2 v2.6.4/go.mod h1:CZpq1cRw+kqi0+yD2CwVw7VGXrrx4AqBdeZnwxVmoAs=
 github.com/appleboy/gofight/v2 v2.1.2/go.mod h1:frW+U1QZEdDgixycTj4CygQ48yLTUhplt43+Wczp3rw=
@@ -47,6 +51,8 @@ github.com/aws/aws-sdk-go v1.38.41 h1:2Q3XaEPmP2cxUB9D9w8kytQh2CSpbJtMKzMN42HMwE
 github.com/aws/aws-sdk-go v1.38.41/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
 github.com/aws/aws-sdk-go v1.38.42 h1:94blpbGDe2q5e0Xoop7131uzI2CH2qitQoptSMrkJP8=
 github.com/aws/aws-sdk-go v1.38.42/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
+github.com/aws/aws-sdk-go v1.38.43 h1:OKe9+Cdmrkhe0KXgpKhrDqidPhXQ4bv1FzzKnrmTJ5g=
+github.com/aws/aws-sdk-go v1.38.43/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

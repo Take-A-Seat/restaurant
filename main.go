@@ -40,11 +40,27 @@ func main() {
 	protectedUsers := router.Group("/restaurants")
 	protectedUsers.Use(validatorAuth.AuthMiddleware(apiUrl + "/auth/isAuthenticated"))
 	{
+
+		//restaurant
 		protectedUsers.POST("/", handleCreateRestaurant)
 		protectedUsers.GET("/", handleGetAllRestaurants)
 		protectedUsers.GET("/id/:id", handleGetRestaurantById)
 		protectedUsers.GET("/managerId/:id", getRestaurantByManagerIdHandler)
 		protectedUsers.PUT("/id/:id", handleUpdateRestaurant)
+
+		//area
+		protectedUsers.POST("/id/:id/area", handleCreateArea)
+		protectedUsers.PUT("/id/:id/area/:areaId", handleUpdateArea)
+		protectedUsers.DELETE("/id/:id/area/:areaId", handleDeleteArea)
+		protectedUsers.GET("/id/:id/area/:areaId", handleGetAreaById)
+		protectedUsers.GET("/id/:id/areas", handleGetAreasByRestaurantId)
+
+		//table
+		protectedUsers.POST("/id/:id/area/:areaId/table", handleCreateTable)
+		protectedUsers.PUT("/id/:id/area/:areaId/table/:tableId", handleUpdateTable)
+		protectedUsers.DELETE("/id/:id/area/:areaId/table/:tableId", handleDeleteTable)
+		protectedUsers.GET("/id/:id/area/:areaId/table/:tableId", handleGetTableById)
+		protectedUsers.GET("/id/:id/areas/:areaId/table", handleGetTablesByAreaId)
 
 	}
 
