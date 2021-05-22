@@ -60,7 +60,7 @@ func main() {
 		protectedUsers.PUT("/id/:id/area/:areaId/table/:tableId", handleUpdateTable)
 		protectedUsers.DELETE("/id/:id/area/:areaId/table/:tableId", handleDeleteTable)
 		protectedUsers.GET("/id/:id/area/:areaId/table/:tableId", handleGetTableById)
-		protectedUsers.GET("/id/:id/areas/:areaId/table", handleGetTablesByAreaId)
+		protectedUsers.GET("/id/:id/areas/:areaId/tables", handleGetTablesByAreaId)
 
 	}
 

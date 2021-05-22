@@ -79,13 +79,13 @@ func deleteArea(areaId string) error {
 	}
 
 	filterArea := bson.M{"_id": areaIdObject}
-	_, err = areasCollection.UpdateOne(context.Background(), filterArea, bson.D{{"deleteAt", time.Now()}})
+	_, err = areasCollection.UpdateOne(context.Background(), filterArea, bson.D{{"$set", bson.D{{"deleteAt", time.Now()}}}})
 	if err != nil {
 		return err
 	}
 
 	filterTables := bson.M{"areaId": areaIdObject}
-	_, err = tablesCollection.UpdateMany(context.Background(), filterTables, bson.D{{"deleteAt", time.Now()}})
+	_, err = tablesCollection.UpdateMany(context.Background(), filterTables, bson.D{{"$set", bson.D{{"deleteAt", time.Now()}}}})
 	if err != nil {
 		return err
 	}
@@ -122,26 +122,26 @@ func getAreasByRestaurantId(restaurantId string) ([]models.Area, error) {
 	client, err := storage.ConnectToDatabase(mongoUser, mongoPass, mongoHost, mongoDatabase)
 	defer storage.DisconnectFromDatabase(client)
 	if err != nil {
-		return nil, err
+		return listAreas, err
 	}
 
 	areasCollection := client.Database(mongoDatabase).Collection("areas")
 	restaurantObjId, err := primitive.ObjectIDFromHex(restaurantId)
 	if err != nil {
-		return nil, err
+		return listAreas, err
 	}
 
 	filterArea := bson.M{"restaurantId": restaurantObjId, "deleteAt": time.Time{}}
 	cursor, err := areasCollection.Find(context.Background(), filterArea)
 	if err != nil {
-		return nil, err
+		return listAreas, err
 	}
 
 	for cursor.Next(context.TODO()) {
 		var area models.Area
 		err = cursor.Decode(&area)
 		if err != nil {
-			return nil, err
+			return listAreas, err
 		}
 
 		listAreas = append(listAreas, area)

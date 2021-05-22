@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"github.com/Take-A-Seat/storage"
 	"github.com/Take-A-Seat/storage/models"
 	"github.com/gin-gonic/gin"
@@ -32,8 +33,8 @@ func handleGetTableById(c *gin.Context) {
 }
 
 func handleDeleteTable(c *gin.Context) {
-
 	var tableId = c.Param("tableId")
+	fmt.Println("intrii macar?", tableId)
 	err := deleteTable(tableId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -103,16 +104,8 @@ func handleGetAreaById(c *gin.Context) {
 }
 
 func handleDeleteArea(c *gin.Context) {
-	var area models.Area
-
-	err := c.ShouldBindJSON(&area)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
 	var areaId = c.Param("areaId")
-	err = deleteArea(areaId)
+	err := deleteArea(areaId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

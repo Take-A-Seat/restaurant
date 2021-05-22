@@ -74,7 +74,6 @@ func deleteTable(tableId string) error {
 	if err != nil {
 		return err
 	}
-
 	tablesCollection := client.Database(mongoDatabase).Collection("tables")
 	tableIdObject, err := primitive.ObjectIDFromHex(tableId)
 	if err != nil {
@@ -82,7 +81,12 @@ func deleteTable(tableId string) error {
 	}
 
 	filterTables := bson.M{"_id": tableIdObject}
-	_, err = tablesCollection.UpdateOne(context.Background(), filterTables, bson.D{{"deleteAt", time.Now()}})
+	updateFields := bson.D{
+		{"$set", bson.D{
+			{"deleteAt", time.Now()},
+		}},
+	}
+	_, err = tablesCollection.UpdateOne(context.Background(), filterTables, updateFields)
 	if err != nil {
 		return err
 	}
