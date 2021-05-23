@@ -32,6 +32,17 @@ func handleGetTableById(c *gin.Context) {
 	}
 }
 
+func handleGetMenuByRestaurantId(c *gin.Context) {
+	var restaurantId = c.Param("id")
+	menu, err := getMenuByRestaurantId(restaurantId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(http.StatusCreated, menu)
+	}
+}
+
 func handleDeleteTable(c *gin.Context) {
 	var tableId = c.Param("tableId")
 	fmt.Println("intrii macar?", tableId)
@@ -150,6 +161,26 @@ func handleCreateArea(c *gin.Context) {
 		c.JSON(http.StatusCreated, gin.H{"error": "Success create area"})
 	}
 }
+
+func handleCreateOrUpdateMenu(c *gin.Context) {
+	var menu models.Menu
+
+	err := c.ShouldBindJSON(&menu)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var restaurantId = c.Param("id")
+	err = createOrUpdateMenu(menu, restaurantId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(http.StatusCreated, gin.H{"error": "Update  menu success"})
+	}
+}
+
 
 func handleCreateRestaurant(c *gin.Context) {
 	var restaurant models.Restaurant

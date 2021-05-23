@@ -4,10 +4,10 @@ go 1.14
 
 require (
 	github.com/Take-A-Seat/auth v0.0.0-20210425174133-670165118c99
-	github.com/Take-A-Seat/storage v0.0.0-20210520072119-8222aab9934e
-	github.com/aws/aws-sdk-go v1.38.43 // indirect
+	github.com/Take-A-Seat/storage v0.0.0-20210523121437-318b06bbb908
+	github.com/aws/aws-sdk-go v1.38.45 // indirect
 	github.com/gin-contrib/cors v1.3.1
-	github.com/gin-gonic/gin v1.7.1
+	github.com/gin-gonic/gin v1.7.2
 	github.com/go-playground/validator/v10 v10.6.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
@@ -23,7 +23,7 @@ require (
 	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
 	golang.org/x/net v0.0.0-20210423184538-5f58ad60dda6 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20210514084401-e8d321eab015 // indirect
+	golang.org/x/sys v0.0.0-20210521203332-0cec03c779c1 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/stretchr/testify.v1 v1.2.2 // indirect

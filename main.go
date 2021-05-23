@@ -62,6 +62,10 @@ func main() {
 		protectedUsers.GET("/id/:id/area/:areaId/table/:tableId", handleGetTableById)
 		protectedUsers.GET("/id/:id/areas/:areaId/tables", handleGetTablesByAreaId)
 
+		//menu
+		protectedUsers.POST("/id/:id/menu", handleCreateOrUpdateMenu)
+		protectedUsers.GET("/id/:id/menu", handleGetMenuByRestaurantId)
+
 	}
 
 	if err := router.Run(":" + port); err != nil {

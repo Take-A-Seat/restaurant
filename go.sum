@@ -39,6 +39,16 @@ github.com/Take-A-Seat/storage v0.0.0-20210519201732-69b37ef027d3 h1:fIcOAyXDCNL
 github.com/Take-A-Seat/storage v0.0.0-20210519201732-69b37ef027d3/go.mod h1:39O8oUD4mCEDUyXJiD4KcwHMnMK1BbsAL47xoY7ECc0=
 github.com/Take-A-Seat/storage v0.0.0-20210520072119-8222aab9934e h1:2OkaqlJ8uuhffpNSQn96ntGrE5+2bOmoPVNlyVD2N8s=
 github.com/Take-A-Seat/storage v0.0.0-20210520072119-8222aab9934e/go.mod h1:39O8oUD4mCEDUyXJiD4KcwHMnMK1BbsAL47xoY7ECc0=
+github.com/Take-A-Seat/storage v0.0.0-20210523094011-f66489289a9a h1:XvWsO4f/NY0yRPZucnAfxGTxEDvg9ibCVUsm37A5p/A=
+github.com/Take-A-Seat/storage v0.0.0-20210523094011-f66489289a9a/go.mod h1:39O8oUD4mCEDUyXJiD4KcwHMnMK1BbsAL47xoY7ECc0=
+github.com/Take-A-Seat/storage v0.0.0-20210523101617-83f768fd7651 h1:4wcvxqVznGsi+jXLv9VJcwR7jBMGtivVc1kQdFPryro=
+github.com/Take-A-Seat/storage v0.0.0-20210523101617-83f768fd7651/go.mod h1:39O8oUD4mCEDUyXJiD4KcwHMnMK1BbsAL47xoY7ECc0=
+github.com/Take-A-Seat/storage v0.0.0-20210523112113-dddf01e772b5 h1:1e0rJKrMU+UGDXmRK2HFWGpyOGVCp5wl7+i5/+QakvU=
+github.com/Take-A-Seat/storage v0.0.0-20210523112113-dddf01e772b5/go.mod h1:39O8oUD4mCEDUyXJiD4KcwHMnMK1BbsAL47xoY7ECc0=
+github.com/Take-A-Seat/storage v0.0.0-20210523113603-cc34367201d0 h1:qb1uBdoerCp9uhB/JrWQW3+YA2WfCHrmbmrsSXIA8fc=
+github.com/Take-A-Seat/storage v0.0.0-20210523113603-cc34367201d0/go.mod h1:39O8oUD4mCEDUyXJiD4KcwHMnMK1BbsAL47xoY7ECc0=
+github.com/Take-A-Seat/storage v0.0.0-20210523121437-318b06bbb908 h1:3+Eaa34X/LonxL/U/ymmhggE6qvYDa14GpbL90GpHx8=
+github.com/Take-A-Seat/storage v0.0.0-20210523121437-318b06bbb908/go.mod h1:39O8oUD4mCEDUyXJiD4KcwHMnMK1BbsAL47xoY7ECc0=
 github.com/appleboy/gin-jwt/v2 v2.6.4 h1:4YlMh3AjCFnuIRiL27b7TXns7nLx8tU/TiSgh40RRUI=
 github.com/appleboy/gin-jwt/v2 v2.6.4/go.mod h1:CZpq1cRw+kqi0+yD2CwVw7VGXrrx4AqBdeZnwxVmoAs=
 github.com/appleboy/gofight/v2 v2.1.2/go.mod h1:frW+U1QZEdDgixycTj4CygQ48yLTUhplt43+Wczp3rw=
@@ -53,6 +63,8 @@ github.com/aws/aws-sdk-go v1.38.42 h1:94blpbGDe2q5e0Xoop7131uzI2CH2qitQoptSMrkJP
 github.com/aws/aws-sdk-go v1.38.42/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
 github.com/aws/aws-sdk-go v1.38.43 h1:OKe9+Cdmrkhe0KXgpKhrDqidPhXQ4bv1FzzKnrmTJ5g=
 github.com/aws/aws-sdk-go v1.38.43/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
+github.com/aws/aws-sdk-go v1.38.45 h1:pQmv1vT/voRAjENnPsT4WobFBgLwnODDFogrt2kXc7M=
+github.com/aws/aws-sdk-go v1.38.45/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
@@ -67,6 +79,8 @@ github.com/gin-gonic/gin v1.5.0/go.mod h1:Nd6IXA8m5kNZdNEHMBd93KT+mdY3+bewLgRvmC
 github.com/gin-gonic/gin v1.6.3/go.mod h1:75u5sXoLsGZoRN5Sgbi1eraJ4GU3++wFwWzhwvtwp4M=
 github.com/gin-gonic/gin v1.7.1 h1:qC89GU3p8TvKWMAVhEpmpB2CIb1hnqt2UdKZaP93mS8=
 github.com/gin-gonic/gin v1.7.1/go.mod h1:jD2toBW3GZUr5UMcdrwQA10I7RuaFOl/SGeDjXkfUtY=
+github.com/gin-gonic/gin v1.7.2 h1:Tg03T9yM2xa8j6I3Z3oqLaQRSmKvxPd6g/2HJ6zICFA=
+github.com/gin-gonic/gin v1.7.2/go.mod h1:jD2toBW3GZUr5UMcdrwQA10I7RuaFOl/SGeDjXkfUtY=
 github.com/go-playground/assert/v2 v2.0.1 h1:MsBgLAaY856+nPRTKrp3/OZK38U/wa0CcBYNjji3q3A=
 github.com/go-playground/assert/v2 v2.0.1/go.mod h1:VDjEfimB/XKnb+ZQfWdccd7VUvScMdVu0Titje2rxJ4=
 github.com/go-playground/locales v0.12.1/go.mod h1:IUMDtCfWo/w/mtMfIE/IG2K+Ey3ygWanZIBtBW0W2TM=
@@ -266,6 +280,8 @@ golang.org/x/sys v0.0.0-20210423185535-09eb48e85fd7 h1:iGu644GcxtEcrInvDsQRCwJjt
 golang.org/x/sys v0.0.0-20210423185535-09eb48e85fd7/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210514084401-e8d321eab015 h1:hZR0X1kPW+nwyJ9xRxqZk1vx5RUObAPBdKVvXPDUH/E=
 golang.org/x/sys v0.0.0-20210514084401-e8d321eab015/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.0.0-20210521203332-0cec03c779c1 h1:lCnv+lfrU9FRPGf8NeRuWAAPjNnema5WtBinMgs1fD8=
+golang.org/x/sys v0.0.0-20210521203332-0cec03c779c1/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.2/go.mod h1:bEr9sfX3Q8Zfm5fL9x+3itogRgK3+ptLWKqgva+5dAk=
