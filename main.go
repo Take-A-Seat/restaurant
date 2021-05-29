@@ -15,7 +15,7 @@ var mongoPass = "p4r0l4"
 var mongoDatabase = "TakeASeat"
 var apiUrl = "https://api.takeaseat.site"
 var hostname = "https://api.takeaseat.site"
-var directoryFiles = "/home/takeaseat/web/files/"
+var directoryFiles = "/home/takeaseat/manager/web/files/"
 
 func main() {
 	port := os.Getenv("TAKEASEAT_RESTAURANTS_PORT")
@@ -43,7 +43,6 @@ func main() {
 
 		//restaurant
 		protectedUsers.POST("/", handleCreateRestaurant)
-		protectedUsers.GET("/", handleGetAllRestaurants)
 		protectedUsers.GET("/id/:id", handleGetRestaurantById)
 		protectedUsers.GET("/managerId/:id", getRestaurantByManagerIdHandler)
 		protectedUsers.PUT("/id/:id", handleUpdateRestaurant)
@@ -64,8 +63,23 @@ func main() {
 
 		//menu
 		protectedUsers.POST("/id/:id/menu", handleCreateOrUpdateMenu)
-		protectedUsers.GET("/id/:id/menu", handleGetMenuByRestaurantId)
 
+		//specificsRestaurant
+		protectedUsers.GET("/specificsRestaurant",handleGetAllSpecificsRestaurant)
+		protectedUsers.GET("/id/:id/specificsRestaurant",handleGetSpecificsFromRestaurant)
+		protectedUsers.POST("/id/:id/specificsRestaurant",handleUpdateSpecificsRestaurant)
+
+		//typesRestaurant
+		protectedUsers.GET("/typesRestaurant",handleGetAllTypesRestaurant)
+		protectedUsers.GET("/id/:id/typesRestaurant",handleGetTypesFromRestaurant)
+		protectedUsers.POST("/id/:id/typesRestaurant",handleUpdateTypesRestaurant)
+
+	}
+
+	freeRoute := router.Group("/restaurants")
+	{
+		freeRoute.GET("/", handleGetAllRestaurants)
+		freeRoute.GET("/id/:id/menu", handleGetMenuByRestaurantId)
 	}
 
 	if err := router.Run(":" + port); err != nil {

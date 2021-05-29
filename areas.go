@@ -6,6 +6,7 @@ import (
 	"github.com/Take-A-Seat/storage/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
 	"time"
 )
 
@@ -144,8 +145,18 @@ func getAreasByRestaurantId(restaurantId string) ([]models.Area, error) {
 			return listAreas, err
 		}
 
+		listTables, _ := getTablesByAreaId(area.Id.Hex())
+		totalNumberPlace := 0
+		availableFree := 0
+		for _, table := range listTables {
+			totalNumberPlace += table.MaxPeople
+			if table.AvailableNow == true {
+				availableFree += table.MaxPeople
+			}
+		}
+		area.Capacity = strconv.Itoa(availableFree) + "/" + strconv.Itoa(totalNumberPlace)
+		area.NumberTables = len(listTables)
 		listAreas = append(listAreas, area)
-
 	}
 
 	return listAreas, nil

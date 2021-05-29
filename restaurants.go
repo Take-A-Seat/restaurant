@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"github.com/Take-A-Seat/storage"
 	"github.com/Take-A-Seat/storage/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -12,6 +14,7 @@ import (
 	"time"
 )
 
+
 func createRestaurant(restaurant models.Restaurant, userId primitive.ObjectID, form *multipart.Form) error {
 	client, err := storage.ConnectToDatabase(mongoUser, mongoPass, mongoHost, mongoDatabase)
 	defer storage.DisconnectFromDatabase(client)
@@ -20,19 +23,31 @@ func createRestaurant(restaurant models.Restaurant, userId primitive.ObjectID, f
 	}
 
 	restaurantsCollection := client.Database(mongoDatabase).Collection("restaurants")
+
 	restaurant.Email = strings.Join(form.Value["email"], "")
 	restaurant.Country = strings.Join(form.Value["country"], "")
 	restaurant.Facebook = strings.Join(form.Value["facebook"], "")
 	restaurant.Instagram = strings.Join(form.Value["instagram"], "")
 	restaurant.Twitter = strings.Join(form.Value["twitter"], "")
 	restaurant.Website = strings.Join(form.Value["website"], "")
-	restaurant.PostCode, _ = strconv.Atoi(strings.Join(form.Value["phone"], ""))
 	restaurant.Name = strings.Join(form.Value["name"], "")
 	restaurant.Address = strings.Join(form.Value["address"], "")
 	restaurant.Phone = strings.Join(form.Value["phone"], "")
+	restaurant.PostCode, _ = strconv.Atoi(strings.Join(form.Value["postCode"], ""))
+	restaurant.Lat, _ = strconv.ParseFloat(strings.Join(form.Value["lat"], ""), 64)
+	restaurant.Lng, _ = strconv.ParseFloat(strings.Join(form.Value["lng"], ""), 64)
 	restaurant.Description = strings.Join(form.Value["description"], "")
+	restaurant.City = strings.Join(form.Value["city"], "")
 	restaurant.StreetAndNumber = strings.Join(form.Value["streetAndNumber"], "")
 	restaurant.Province = strings.Join(form.Value["province"], "")
+
+	programString := strings.Join(form.Value["program"], "")
+	fmt.Println(programString)
+	err = json.Unmarshal([]byte(programString), &restaurant.Program)
+	if err != nil {
+		return err
+	}
+
 	restaurantId := primitive.NewObjectID()
 
 	filePrefix := restaurantId.Hex()
@@ -62,6 +77,8 @@ func createRestaurant(restaurant models.Restaurant, userId primitive.ObjectID, f
 		"twitter":         restaurant.Twitter,
 		"logo":            restaurant.Logo,
 		"streetAndNumber": restaurant.StreetAndNumber,
+		"lat":             restaurant.Lat,
+		"lng":             restaurant.Lng,
 		"province":        restaurant.Province,
 		"deleteAt":        restaurant.DeleteAt})
 
@@ -169,12 +186,20 @@ func updateRestaurant(restaurant models.Restaurant, form *multipart.Form) error 
 	restaurant.Address = strings.Join(form.Value["address"], "")
 	restaurant.Phone = strings.Join(form.Value["phone"], "")
 	restaurant.PostCode, _ = strconv.Atoi(strings.Join(form.Value["postCode"], ""))
+	restaurant.Lat, _ = strconv.ParseFloat(strings.Join(form.Value["lat"], ""), 64)
+	restaurant.Lng, _ = strconv.ParseFloat(strings.Join(form.Value["lng"], ""), 64)
 	restaurant.Description = strings.Join(form.Value["description"], "")
 	restaurant.City = strings.Join(form.Value["city"], "")
 	restaurant.StreetAndNumber = strings.Join(form.Value["streetAndNumber"], "")
 	restaurant.Province = strings.Join(form.Value["province"], "")
 	filePrefix := strings.Join(form.Value["id"], "")
 	changeLogo, _ := strconv.ParseBool(strings.Join(form.Value["changeLogo"], ""))
+	programString := strings.Join(form.Value["program"], "")
+
+	err = json.Unmarshal([]byte(programString), &restaurant.Program)
+	if err != nil {
+		return err
+	}
 
 	restaurantIdObject, err := primitive.ObjectIDFromHex(filePrefix)
 	if err != nil {
@@ -207,7 +232,7 @@ func updateRestaurant(restaurant models.Restaurant, form *multipart.Form) error 
 		{"$set", bson.D{
 			{"name", restaurant.Name},
 			{"description", restaurant.Description},
-			{"address", restaurant.Description},
+			{"address", restaurant.Address},
 			{"phone", restaurant.Phone},
 			{"program", restaurant.Program},
 			{"postCode", restaurant.PostCode},
@@ -221,6 +246,8 @@ func updateRestaurant(restaurant models.Restaurant, form *multipart.Form) error 
 			{"instagram", restaurant.Instagram},
 			{"twitter", restaurant.Twitter},
 			{"website", restaurant.Website},
+			{"lat", restaurant.Lat},
+			{"lng", restaurant.Lng},
 		}},
 	}
 

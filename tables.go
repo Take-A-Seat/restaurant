@@ -24,6 +24,7 @@ func createTable(table models.Table) error {
 		"areaId":          table.AreaId,
 		"tableGroupId":    table.TableGroupId,
 		"priority":        table.Priority,
+		"availableNow":    true,
 		"availableOnline": table.AvailableOnline,
 		"minPeople":       table.MinPeople,
 		"maxPeople":       table.MaxPeople,

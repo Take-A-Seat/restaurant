@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"github.com/Take-A-Seat/storage"
 	"github.com/Take-A-Seat/storage/models"
 	"github.com/gin-gonic/gin"
@@ -20,6 +19,87 @@ func handleGetTablesByAreaId(c *gin.Context) {
 		c.JSON(http.StatusCreated, tables)
 	}
 }
+
+func handleGetAllSpecificsRestaurant(c *gin.Context) {
+	listSpecific, err := getAllSpecific()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(http.StatusCreated, listSpecific)
+	}
+}
+
+func handleGetSpecificsFromRestaurant(c *gin.Context) {
+	var restaurantId = c.Param("id")
+
+	listSpecific, err := getSpecificFromRestaurantId(restaurantId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(http.StatusCreated, listSpecific)
+	}
+}
+
+func handleUpdateSpecificsRestaurant(c *gin.Context) {
+	var restaurantId = c.Param("id")
+	var specifics []primitive.ObjectID
+
+	err := c.ShouldBindJSON(&specifics)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err = updateSpecificsRestaurant(specifics, restaurantId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(http.StatusCreated, gin.H{"error": "Update  specifics success"})
+	}
+}
+
+func handleGetAllTypesRestaurant(c *gin.Context) {
+	listTypes, err := getAllTypesRestaurant()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(http.StatusCreated, listTypes)
+	}
+}
+
+func handleGetTypesFromRestaurant(c *gin.Context) {
+	var restaurantId = c.Param("id")
+
+	listTypes, err := getTypesFromRestaurantId(restaurantId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(http.StatusCreated, listTypes)
+	}
+}
+
+func handleUpdateTypesRestaurant(c *gin.Context) {
+	var restaurantId = c.Param("id")
+	var types []primitive.ObjectID
+
+	err := c.ShouldBindJSON(&types)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err = updateTypesRestaurant(types, restaurantId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		c.JSON(http.StatusCreated, gin.H{"error": "Update  types success"})
+	}
+}
+
 
 func handleGetTableById(c *gin.Context) {
 	var tableId = c.Param("tableId")
@@ -45,7 +125,6 @@ func handleGetMenuByRestaurantId(c *gin.Context) {
 
 func handleDeleteTable(c *gin.Context) {
 	var tableId = c.Param("tableId")
-	fmt.Println("intrii macar?", tableId)
 	err := deleteTable(tableId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
