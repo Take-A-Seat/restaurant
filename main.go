@@ -43,7 +43,6 @@ func main() {
 
 		//restaurant
 		protectedUsers.POST("/", handleCreateRestaurant)
-		protectedUsers.GET("/id/:id", handleGetRestaurantById)
 		protectedUsers.GET("/managerId/:id", getRestaurantByManagerIdHandler)
 		protectedUsers.PUT("/id/:id", handleUpdateRestaurant)
 
@@ -65,12 +64,10 @@ func main() {
 		protectedUsers.POST("/id/:id/menu", handleCreateOrUpdateMenu)
 
 		//specificsRestaurant
-		protectedUsers.GET("/specificsRestaurant",handleGetAllSpecificsRestaurant)
 		protectedUsers.GET("/id/:id/specificsRestaurant",handleGetSpecificsFromRestaurant)
 		protectedUsers.POST("/id/:id/specificsRestaurant",handleUpdateSpecificsRestaurant)
 
 		//typesRestaurant
-		protectedUsers.GET("/typesRestaurant",handleGetAllTypesRestaurant)
 		protectedUsers.GET("/id/:id/typesRestaurant",handleGetTypesFromRestaurant)
 		protectedUsers.POST("/id/:id/typesRestaurant",handleUpdateTypesRestaurant)
 
@@ -79,7 +76,17 @@ func main() {
 	freeRoute := router.Group("/restaurants")
 	{
 		freeRoute.GET("/", handleGetAllRestaurants)
+
 		freeRoute.GET("/id/:id/menu", handleGetMenuByRestaurantId)
+
+		freeRoute.GET("/specificsRestaurant",handleGetAllSpecificsRestaurant)
+
+		freeRoute.GET("/typesRestaurant",handleGetAllTypesRestaurant)
+
+		freeRoute.GET("/id/:id", handleGetRestaurantById)
+
+
+
 	}
 
 	if err := router.Run(":" + port); err != nil {

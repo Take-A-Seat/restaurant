@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/Take-A-Seat/storage"
 	"github.com/Take-A-Seat/storage/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -14,6 +13,11 @@ import (
 	"time"
 )
 
+type RestaurantWithDetails struct {
+	RestaurantDetails models.Restaurant                   `json:"restaurantDetails"`
+	ListSpecifics     []models.SpecificRestaurantRelation `json:"listSpecifics"`
+	ListTypes         []models.TypeRestaurantRelation     `json:"listTypes"`
+}
 
 func createRestaurant(restaurant models.Restaurant, userId primitive.ObjectID, form *multipart.Form) error {
 	client, err := storage.ConnectToDatabase(mongoUser, mongoPass, mongoHost, mongoDatabase)
@@ -31,7 +35,6 @@ func createRestaurant(restaurant models.Restaurant, userId primitive.ObjectID, f
 	restaurant.Twitter = strings.Join(form.Value["twitter"], "")
 	restaurant.Website = strings.Join(form.Value["website"], "")
 	restaurant.Name = strings.Join(form.Value["name"], "")
-	restaurant.Address = strings.Join(form.Value["address"], "")
 	restaurant.Phone = strings.Join(form.Value["phone"], "")
 	restaurant.PostCode, _ = strconv.Atoi(strings.Join(form.Value["postCode"], ""))
 	restaurant.Lat, _ = strconv.ParseFloat(strings.Join(form.Value["lat"], ""), 64)
@@ -39,10 +42,10 @@ func createRestaurant(restaurant models.Restaurant, userId primitive.ObjectID, f
 	restaurant.Description = strings.Join(form.Value["description"], "")
 	restaurant.City = strings.Join(form.Value["city"], "")
 	restaurant.StreetAndNumber = strings.Join(form.Value["streetAndNumber"], "")
+	restaurant.VisibleOnline, _ = strconv.ParseBool(strings.Join(form.Value["visibleOnline"], ""))
 	restaurant.Province = strings.Join(form.Value["province"], "")
 
 	programString := strings.Join(form.Value["program"], "")
-	fmt.Println(programString)
 	err = json.Unmarshal([]byte(programString), &restaurant.Program)
 	if err != nil {
 		return err
@@ -65,7 +68,6 @@ func createRestaurant(restaurant models.Restaurant, userId primitive.ObjectID, f
 		"_id":             restaurantId,
 		"name":            restaurant.Name,
 		"description":     restaurant.Description,
-		"address":         restaurant.Address,
 		"phone":           restaurant.Phone,
 		"program":         restaurant.Program,
 		"postCode":        restaurant.PostCode,
@@ -77,9 +79,11 @@ func createRestaurant(restaurant models.Restaurant, userId primitive.ObjectID, f
 		"twitter":         restaurant.Twitter,
 		"logo":            restaurant.Logo,
 		"streetAndNumber": restaurant.StreetAndNumber,
+		"city":            restaurant.City,
 		"lat":             restaurant.Lat,
 		"lng":             restaurant.Lng,
 		"province":        restaurant.Province,
+		"visibleOnline":   restaurant.VisibleOnline,
 		"deleteAt":        restaurant.DeleteAt})
 
 	if err != nil {
@@ -94,8 +98,8 @@ func createRestaurant(restaurant models.Restaurant, userId primitive.ObjectID, f
 	return nil
 }
 
-func getAllRestaurants() ([]models.Restaurant, error) {
-	var listRestaurants []models.Restaurant
+func getAllRestaurants() ([]RestaurantWithDetails, error) {
+	var listRestaurants []RestaurantWithDetails
 
 	client, err := storage.ConnectToDatabase(mongoUser, mongoPass, mongoHost, mongoDatabase)
 	defer storage.DisconnectFromDatabase(client)
@@ -104,14 +108,24 @@ func getAllRestaurants() ([]models.Restaurant, error) {
 	}
 
 	restaurantsCollection := client.Database(mongoDatabase).Collection("restaurants")
-	cursor, err := restaurantsCollection.Find(context.Background(), bson.M{"deleteAt": time.Time{}})
+	cursor, err := restaurantsCollection.Find(context.Background(), bson.M{"deleteAt": time.Time{}, "visibleOnline": true})
 	if err != nil {
 		return nil, err
 	}
 
 	for cursor.Next(context.TODO()) {
-		var restaurant models.Restaurant
-		err := cursor.Decode(&restaurant)
+		var restaurant RestaurantWithDetails
+		err := cursor.Decode(&restaurant.RestaurantDetails)
+		if err != nil {
+			return nil, err
+		}
+
+		restaurant.ListTypes, err = getTypesFromRestaurantId(restaurant.RestaurantDetails.Id.Hex())
+		if err != nil {
+			return nil, err
+		}
+
+		restaurant.ListSpecifics, err = getSpecificFromRestaurantId(restaurant.RestaurantDetails.Id.Hex())
 		if err != nil {
 			return nil, err
 		}
@@ -122,45 +136,55 @@ func getAllRestaurants() ([]models.Restaurant, error) {
 	return listRestaurants, nil
 }
 
-func getRestaurantById(restaurantId primitive.ObjectID) (models.Restaurant, error) {
-	var restaurant models.Restaurant
+func getRestaurantById(restaurantId primitive.ObjectID) (RestaurantWithDetails, error) {
+	var restaurant RestaurantWithDetails
 	var filter = bson.M{"_id": restaurantId}
 
 	client, err := storage.ConnectToDatabase(mongoUser, mongoPass, mongoHost, mongoDatabase)
 	defer storage.DisconnectFromDatabase(client)
 	if err != nil {
-		return models.Restaurant{}, err
+		return RestaurantWithDetails{}, err
 	}
 
 	restaurantsCollection := client.Database(mongoDatabase).Collection("restaurants")
-	err = restaurantsCollection.FindOne(context.Background(), filter).Decode(&restaurant)
+	err = restaurantsCollection.FindOne(context.Background(), filter).Decode(&restaurant.RestaurantDetails)
+
 	if err != nil {
-		return models.Restaurant{}, err
+		return RestaurantWithDetails{}, err
+	}
+	restaurant.ListTypes, err = getTypesFromRestaurantId(restaurant.RestaurantDetails.Id.Hex())
+	if err != nil {
+		return RestaurantWithDetails{}, err
+	}
+
+	restaurant.ListSpecifics, err = getSpecificFromRestaurantId(restaurant.RestaurantDetails.Id.Hex())
+	if err != nil {
+		return RestaurantWithDetails{}, err
 	}
 
 	return restaurant, nil
 }
 
-func getRestaurantByManagerId(managerId primitive.ObjectID) (models.Restaurant, int, error) {
+func getRestaurantByManagerId(managerId primitive.ObjectID) (RestaurantWithDetails, int, error) {
 	client, err := storage.ConnectToDatabase(mongoUser, mongoPass, mongoHost, mongoDatabase)
 	defer storage.DisconnectFromDatabase(client)
 	if err != nil {
-		return models.Restaurant{}, 400, err
+		return RestaurantWithDetails{}, 400, err
 	}
 
 	var managerRelation ManagerRelation
 	restaurantsCollection := client.Database(mongoDatabase).Collection("managers")
 	count, err := restaurantsCollection.CountDocuments(context.Background(), bson.M{"userId": managerId})
 	if count == 0 || err != nil {
-		return models.Restaurant{}, 404, err
+		return RestaurantWithDetails{}, 404, err
 	} else {
 		err = restaurantsCollection.FindOne(context.Background(), bson.M{"userId": managerId}).Decode(&managerRelation)
 		if err != nil {
-			return models.Restaurant{}, 400, err
+			return RestaurantWithDetails{}, 400, err
 		} else {
 			restaurant, err := getRestaurantById(managerRelation.RestaurantId)
 			if err != nil {
-				return models.Restaurant{}, 400, err
+				return RestaurantWithDetails{}, 400, err
 			}
 
 			return restaurant, 200, nil
@@ -183,7 +207,6 @@ func updateRestaurant(restaurant models.Restaurant, form *multipart.Form) error 
 	restaurant.Twitter = strings.Join(form.Value["twitter"], "")
 	restaurant.Website = strings.Join(form.Value["website"], "")
 	restaurant.Name = strings.Join(form.Value["name"], "")
-	restaurant.Address = strings.Join(form.Value["address"], "")
 	restaurant.Phone = strings.Join(form.Value["phone"], "")
 	restaurant.PostCode, _ = strconv.Atoi(strings.Join(form.Value["postCode"], ""))
 	restaurant.Lat, _ = strconv.ParseFloat(strings.Join(form.Value["lat"], ""), 64)
@@ -192,6 +215,7 @@ func updateRestaurant(restaurant models.Restaurant, form *multipart.Form) error 
 	restaurant.City = strings.Join(form.Value["city"], "")
 	restaurant.StreetAndNumber = strings.Join(form.Value["streetAndNumber"], "")
 	restaurant.Province = strings.Join(form.Value["province"], "")
+	restaurant.VisibleOnline, _ = strconv.ParseBool(strings.Join(form.Value["visibleOnline"], ""))
 	filePrefix := strings.Join(form.Value["id"], "")
 	changeLogo, _ := strconv.ParseBool(strings.Join(form.Value["changeLogo"], ""))
 	programString := strings.Join(form.Value["program"], "")
@@ -223,7 +247,7 @@ func updateRestaurant(restaurant models.Restaurant, form *multipart.Form) error 
 		}
 
 	} else {
-		restaurant.Logo = restaurantFromDB.Logo
+		restaurant.Logo = restaurantFromDB.RestaurantDetails.Logo
 	}
 
 	restaurantsCollection := client.Database(mongoDatabase).Collection("restaurants")
@@ -232,7 +256,6 @@ func updateRestaurant(restaurant models.Restaurant, form *multipart.Form) error 
 		{"$set", bson.D{
 			{"name", restaurant.Name},
 			{"description", restaurant.Description},
-			{"address", restaurant.Address},
 			{"phone", restaurant.Phone},
 			{"program", restaurant.Program},
 			{"postCode", restaurant.PostCode},
@@ -248,6 +271,7 @@ func updateRestaurant(restaurant models.Restaurant, form *multipart.Form) error 
 			{"website", restaurant.Website},
 			{"lat", restaurant.Lat},
 			{"lng", restaurant.Lng},
+			{"visibleOnline", restaurant.VisibleOnline},
 		}},
 	}
 
