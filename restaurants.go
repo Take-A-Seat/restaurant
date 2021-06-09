@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-type RestaurantWithDetails struct {
-	RestaurantDetails models.Restaurant                   `json:"restaurantDetails"`
-	ListSpecifics     []models.SpecificRestaurantRelation `json:"listSpecifics"`
-	ListTypes         []models.TypeRestaurantRelation     `json:"listTypes"`
-}
+//type RestaurantWithDetails struct {
+//	RestaurantDetails models.Restaurant                   `json:"restaurantDetails"`
+//	ListSpecifics     []models.SpecificRestaurantRelation `json:"listSpecifics"`
+//	ListTypes         []models.TypeRestaurantRelation     `json:"listTypes"`
+//}
 
 func createRestaurant(restaurant models.Restaurant, userId primitive.ObjectID, form *multipart.Form) error {
 	client, err := storage.ConnectToDatabase(mongoUser, mongoPass, mongoHost, mongoDatabase)
@@ -98,8 +98,8 @@ func createRestaurant(restaurant models.Restaurant, userId primitive.ObjectID, f
 	return nil
 }
 
-func getAllRestaurants() ([]RestaurantWithDetails, error) {
-	var listRestaurants []RestaurantWithDetails
+func getAllRestaurants() ([]models.RestaurantWithDetails, error) {
+	var listRestaurants []models.RestaurantWithDetails
 
 	client, err := storage.ConnectToDatabase(mongoUser, mongoPass, mongoHost, mongoDatabase)
 	defer storage.DisconnectFromDatabase(client)
@@ -114,7 +114,7 @@ func getAllRestaurants() ([]RestaurantWithDetails, error) {
 	}
 
 	for cursor.Next(context.TODO()) {
-		var restaurant RestaurantWithDetails
+		var restaurant models.RestaurantWithDetails
 		err := cursor.Decode(&restaurant.RestaurantDetails)
 		if err != nil {
 			return nil, err
@@ -136,55 +136,55 @@ func getAllRestaurants() ([]RestaurantWithDetails, error) {
 	return listRestaurants, nil
 }
 
-func getRestaurantById(restaurantId primitive.ObjectID) (RestaurantWithDetails, error) {
-	var restaurant RestaurantWithDetails
+func getRestaurantById(restaurantId primitive.ObjectID) (models.RestaurantWithDetails, error) {
+	var restaurant models.RestaurantWithDetails
 	var filter = bson.M{"_id": restaurantId}
 
 	client, err := storage.ConnectToDatabase(mongoUser, mongoPass, mongoHost, mongoDatabase)
 	defer storage.DisconnectFromDatabase(client)
 	if err != nil {
-		return RestaurantWithDetails{}, err
+		return models.RestaurantWithDetails{}, err
 	}
 
 	restaurantsCollection := client.Database(mongoDatabase).Collection("restaurants")
 	err = restaurantsCollection.FindOne(context.Background(), filter).Decode(&restaurant.RestaurantDetails)
 
 	if err != nil {
-		return RestaurantWithDetails{}, err
+		return models.RestaurantWithDetails{}, err
 	}
 	restaurant.ListTypes, err = getTypesFromRestaurantId(restaurant.RestaurantDetails.Id.Hex())
 	if err != nil {
-		return RestaurantWithDetails{}, err
+		return models.RestaurantWithDetails{}, err
 	}
 
 	restaurant.ListSpecifics, err = getSpecificFromRestaurantId(restaurant.RestaurantDetails.Id.Hex())
 	if err != nil {
-		return RestaurantWithDetails{}, err
+		return models.RestaurantWithDetails{}, err
 	}
 
 	return restaurant, nil
 }
 
-func getRestaurantByManagerId(managerId primitive.ObjectID) (RestaurantWithDetails, int, error) {
+func getRestaurantByManagerId(managerId primitive.ObjectID) (models.RestaurantWithDetails, int, error) {
 	client, err := storage.ConnectToDatabase(mongoUser, mongoPass, mongoHost, mongoDatabase)
 	defer storage.DisconnectFromDatabase(client)
 	if err != nil {
-		return RestaurantWithDetails{}, 400, err
+		return models.RestaurantWithDetails{}, 400, err
 	}
 
 	var managerRelation ManagerRelation
 	restaurantsCollection := client.Database(mongoDatabase).Collection("managers")
 	count, err := restaurantsCollection.CountDocuments(context.Background(), bson.M{"userId": managerId})
 	if count == 0 || err != nil {
-		return RestaurantWithDetails{}, 404, err
+		return models.RestaurantWithDetails{}, 404, err
 	} else {
 		err = restaurantsCollection.FindOne(context.Background(), bson.M{"userId": managerId}).Decode(&managerRelation)
 		if err != nil {
-			return RestaurantWithDetails{}, 400, err
+			return models.RestaurantWithDetails{}, 400, err
 		} else {
 			restaurant, err := getRestaurantById(managerRelation.RestaurantId)
 			if err != nil {
-				return RestaurantWithDetails{}, 400, err
+				return models.RestaurantWithDetails{}, 400, err
 			}
 
 			return restaurant, 200, nil
