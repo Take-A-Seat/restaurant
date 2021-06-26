@@ -61,6 +61,16 @@ func createOrUpdateMenu(menu models.Menu, restaurantId string) error {
 			return err
 		}
 	} else {
+		for indexPage, page := range menu.Pages {
+			for indexSection, section := range page.Sections {
+				for indexProduct, product := range section.Products {
+					if product.Id.IsZero() {
+						menu.Pages[indexPage].Sections[indexSection].Products[indexProduct].Id = primitive.NewObjectID()
+					}
+				}
+			}
+		}
+
 		updateObject := bson.D{{"$set", bson.D{
 			{"pages", menu.Pages},
 		}}}
